@@ -1,0 +1,18 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(blueviolet, rgb(255, 0, 255));
+    min-height: 100vh;
+    text-align: center;
+    color: white;
+}
+.data{
+    border: 2px solid gold;
+    margin: 1rem;
+    color: gold;
+}
+.dataOther{
+    border: 2px solid red;
+    margin: 1rem;
+    color: rgb(57, 255, 8);
+}

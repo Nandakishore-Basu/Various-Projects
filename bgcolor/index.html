@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background</title>
+    <style>
+        button{
+            border-radius: 1rem;
+            background: linear-gradient(45deg, red,blue);
+            color: white;
+            padding: 0.5rem;
+            border: 3px solid black;
+            transition: opacity 0.1ms;
+        }
+        button:hover{
+            opacity: 0.8;
+        }
+        button:active{
+            opacity: 0.5;
+        }
+        h1{
+            text-align: center;
+        }
+        .btnC {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Colour Changer &nbsp;(Press The Buttons)</h1>
+    <div class="btnC">
+        <button class="btn1">Red</button>
+        <button class="btn2">Blue</button>
+        <button class="btn3">Green</button>
+        <button class="btn4">Yellow</button>
+        <button class="btn5">Black</button>
+        <button class="btn6">White</button>
+    </div>
+</body>
+<script>
+let btn1 = document.querySelector('.btn1')
+let btn2 = document.querySelector('.btn2')
+let btn3 = document.querySelector('.btn3')
+let btn4 = document.querySelector('.btn4')
+let btn5 = document.querySelector('.btn5')
+let btn6 = document.querySelector('.btn6')
+let h1 = document.querySelector('h1')
+let body = document.body
+btn1.addEventListener('click', () => {
+    body.style.backgroundColor = 'red'
+    h1.style.color = 'white'
+})
+btn2.addEventListener('click', () => {
+    body.style.backgroundColor = 'blue'
+    h1.style.color = 'white'
+})
+btn3.addEventListener('click', () => {
+    body.style.backgroundColor = 'green'
+    h1.style.color = 'white'
+})
+btn4.addEventListener('click', () => {
+    body.style.backgroundColor = 'yellow'
+    h1.style.color = 'black'
+})
+btn5.addEventListener('click', () => {
+    body.style.backgroundColor = 'black'
+    h1.style.color = 'white'
+})
+btn6.addEventListener('click', () => {
+    body.style.backgroundColor = 'white'
+    h1.style.color = 'black'
+})
+</script>
+</html>

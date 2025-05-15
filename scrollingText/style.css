@@ -1,0 +1,12 @@
+body{
+    background-color: red;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+h1, h1::selection{
+    color: white;
+}

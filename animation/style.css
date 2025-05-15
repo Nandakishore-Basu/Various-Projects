@@ -1,0 +1,30 @@
+body{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: aquamarine;
+}
+.div1{
+    height: 100px;
+    width: 100px;
+    background-color: red;
+}
+.div1:hover{
+    animation: anim 1s ease-in-out 0.25s 5 alternate forwards;
+}
+.div1:active{
+    animation: act 2s ease-in-out 0s 1 alternate forwards;
+}
+@keyframes anim {
+    from{}
+    to{background-color: aquamarine;
+    border-radius: 25%;}
+}
+@keyframes act {
+    from{background-color: aquamarine;}
+    to{transform: scale(5);
+    border-radius: 25%;
+    background-color: aqua;}
+}

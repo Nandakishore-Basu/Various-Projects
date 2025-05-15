@@ -1,0 +1,38 @@
+.box {
+  height: 100px;
+  width: 100px;
+  margin-top: 5px;
+  border: 2px solid rgb(24, 234, 234);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: blur(5px);
+  background: aquamarine;
+  font-size: 10px;
+  align-self: center;
+}
+.box:hover {
+  background: linear-gradient(aqua, blue);
+  animation: anim 5s ease-in-out 100ms 2 alternate forwards;
+}
+#con {
+  align-self: center;
+  position: absolute;
+  top: 25%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(to left, indigo, blue, green, yellow, orange, red);
+}
+#th {
+  background-image: url(/CSS\ Development/Sunglass.jpg);
+  background-size: cover;
+}
+@keyframes anim {
+  to {
+    transform: scale(4.4);
+  }
+}

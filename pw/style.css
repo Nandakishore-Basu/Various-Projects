@@ -1,0 +1,76 @@
+body{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(blue,aqua);
+}
+.container{
+    border: 2px solid black;
+    padding: 2rem;
+    text-align: center;
+    color: black;
+    height: 20rem;
+    width: 18rem;
+    background-color: bisque;
+    border-radius: 2rem;
+}
+#msg{
+    text-align: center;
+    margin-top: -1.5rem;
+    margin-bottom: 0.4rem;
+}
+form{
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    justify-content: center;
+}
+form input,button{
+    border-radius: 1rem;
+    text-align: center;
+    padding: 1rem;
+    font-size: 16px;
+}
+section.opt{
+    display: flex;
+    margin-bottom: 1rem;
+}
+.opt input{
+    width: 10rem;
+    padding: 0.5rem;
+}
+.opt button{
+    width: calc(6rem - 8.2px);
+    text-align: center;
+    font-size: 13px;
+    background: linear-gradient(red,blue);
+    color: azure;
+    padding: 0.5rem;
+    margin-left: 5px;
+}
+#a1{
+    font-size: 1.6rem;
+    color: rgb(66, 66, 243);
+}
+h2{
+    margin-bottom: -2rem;
+    margin-top: -0.8rem;
+}
+button:hover, #sub:hover{
+    opacity: 0.85;
+}
+button:active, #sub:active{
+    opacity: 0.2;
+}
+:disabled{
+    display: none;
+}
+#sub{
+    background: linear-gradient(red,blue);
+    color: azure;
+    font-size: 25px;
+}

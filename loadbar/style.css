@@ -1,0 +1,57 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(45deg, darkviolet, orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+.load {
+  height: 1.58%;
+  width: 70%;
+  background: linear-gradient(to right, pink, violet);
+  border: 2px solid black;
+  display: flex;
+  overflow: hidden;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: -280px;
+}
+#color {
+  margin: 0;
+  padding: 0;
+  width: 1.5%;
+  background: linear-gradient(96deg, blue, red);
+}
+.loading {
+  animation: anim 15s ease 0.5s forwards;
+}
+@keyframes anim {
+  to {
+    width: 100%;
+  }
+}
+#btn,
+#btn2 {
+  margin-top: -280px;
+  border-radius: 25px;
+  background: blue;
+  color: white;
+  transition: opacity 0.15s;
+  height: 50px;
+  width: 100px;
+  font-size: 18px;
+}
+#btn2 {
+    margin-left: 50px;
+}
+#btn:hover,
+#btn2:hover {
+  opacity: 0.8;
+}
+#btn:active,
+#btn2:active {
+  opacity: 0.6;
+}

@@ -1,0 +1,38 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: darkorchid;
+}
+.box{
+    height: 5cm;
+    width: 2cm;
+    background-color: black;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: last baseline;
+}
+#charge{
+    width: 100%;
+    height: 27px;
+    border-radius: 14px;
+    background-color: rgb(251, 8, 8);
+    text-align: center;
+    color: aliceblue;
+    overflow: hidden;
+}
+.box:hover{
+    #charge{
+        animation: charg 10s ease-in forwards;
+    }
+}
+@keyframes charg {
+    0%{}
+    33%{height: 33%; background-color: orangered;}
+    66%{height: 66%; background-color: rgb(204, 204, 20);}
+    90%{height: 90%; background-color: yellowgreen;}
+    100%{height: 100%; background-color: green;}
+}
