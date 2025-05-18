@@ -52,3 +52,4 @@ which means, **html** **css** and **javascript**
 [stone_paper_scissor](stone_paper_scissor/index.html)<br>
 [tic_tac_toe](tic_tac_toe/index.html)<br>
 [welcome](welcome/index.html)<br>
+[tipCalculator](tipCalc/index.html)<br>
