@@ -61,7 +61,3 @@ function intro(Person, clr, txt) {
         document.querySelector(`#${Person.uid}`).querySelector('h3').innerText = txt
     }
 }
-
-for (let i = 1; i <= 500; i++) {
-    addData(new Person(`a${i}`, `Person ${i}`, 'Post'))
-}
