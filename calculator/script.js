@@ -10,7 +10,7 @@ function r1() {
     p1.value = str
 }
 function ent() {
-    str = eval(str)
+    str = `${eval(str)}`
     p1.value = str
 }
 function acF() {
