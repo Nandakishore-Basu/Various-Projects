@@ -53,3 +53,4 @@ which means, **html** **css** and **javascript**
 [tic_tac_toe](tic_tac_toe/index.html)<br>
 [welcome](welcome/index.html)<br>
 [tipCalculator](tipCalc/index.html)<br>
+[weatherApp](weather_app/lib/main.dart)<br>
