@@ -78,7 +78,9 @@ class _PageState extends State<Page> {
           final timezone = data["timezone_abbreviation"];
           final mApTemp = data["current"]["apparent_temperature"].toString();
           forecastCards.clear();
+          dailyCards.clear();
           formForecastCards(data);
+          formDailyCards(data);
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -122,6 +124,7 @@ class _PageState extends State<Page> {
                       ),
                     ],
                   ),
+            
                   const SizedBox(height: 20),
                   mainCard(
                     temp: mTemp,
@@ -138,11 +141,6 @@ class _PageState extends State<Page> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   const SizedBox(height: 5),
-
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   child: Row(children: forecastCards),
-                  // ), //forecast
                   SizedBox(
                     height: 240,
                     child: ListView.builder(
@@ -153,6 +151,7 @@ class _PageState extends State<Page> {
                       },
                     ),
                   ),
+
                   const SizedBox(height: 20),
                   Text(
                     'Additional Information',
@@ -180,6 +179,23 @@ class _PageState extends State<Page> {
                       ),
                     ],
                   ), //additinal
+
+                  const SizedBox(height: 20),
+                  Text(
+                    'Daily Information',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  const SizedBox(height: 5),
+
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: dailyCards,
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
                 ],
               ),
             ),

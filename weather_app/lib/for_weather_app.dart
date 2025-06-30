@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
@@ -14,7 +15,8 @@ forecastCard({
   required String appTemp,
 }) {
   return Card(
-    color: Color.fromARGB(255, 104, 105, 101),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    color: Color.fromARGB(255, 173, 173, 132),
     elevation: 12,
     child: Padding(
       padding: const EdgeInsets.all(12),
@@ -93,13 +95,13 @@ add({
   return Column(
     children: [
       Icon(icon, size: 50),
-      Text(type, style: TextStyle(fontWeight: FontWeight.bold)),
+      Text(type, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
       Text(value.toString()),
     ],
   );
 }
 
-var lat = 22.6598, lon = 88.3623;
+double lat = 22.6598, lon = 88.3623;
 
 String place = 'DAKSHINESWAR';
 
@@ -109,9 +111,9 @@ Map<String, String> getWeatherType(int code, DateTime time) {
   String timeKey = isDay ? 'day' : 'night';
   var weatherInfo = data[code.toString()][timeKey];
   return {
-      'description': weatherInfo['description'],
-      'image': weatherInfo['image'],
-    };
+    'description': weatherInfo['description'],
+    'image': weatherInfo['image'],
+  };
 }
 
 List<Widget> forecastCards = [];
@@ -120,7 +122,10 @@ dynamic formForecastCards(data) {
     var time = toForm(data["hourly"]["time"][i], 'j');
     var date = toForm(data["hourly"]["time"][i].split('T')[0], 'dd.MM.yyyy');
     var temp = data["hourly"]["temperature_2m"][i];
-    var typeicon = getWeatherType(data["hourly"]["weather_code"][i], DateTime.parse(data["hourly"]["time"][i]));
+    var typeicon = getWeatherType(
+      data["hourly"]["weather_code"][i],
+      DateTime.parse(data["hourly"]["time"][i]),
+    );
     var icon = typeicon["image"]!;
     var type = typeicon["description"]!;
     String appTemp = data["hourly"]["apparent_temperature"][i].toString();
@@ -159,8 +164,13 @@ fetchCoordinates(String location) async {
 
 Future<Map<String, dynamic>> getWeather() async {
   try {
+    final current =
+        'temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,pressure_msl,apparent_temperature';
+    final hourly = 'temperature_2m,weather_code,apparent_temperature';
+    final daily =
+        'temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,precipitation_sum';
     final apiWeather =
-        'https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lon&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,pressure_msl,apparent_temperature&hourly=temperature_2m,weather_code,apparent_temperature&timezone=auto&timeformat=iso8601';
+        'https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lon&current=$current&hourly=$hourly&daily=$daily&timezone=auto&timeformat=iso8601';
     final url = Uri.parse(apiWeather);
     final res = await http.get(url);
     final data = jsonDecode(res.body);
@@ -179,4 +189,121 @@ toForm(String date, String format) {
   var parsed = DateTime.parse(date);
   var formatted = DateFormat(format).format(parsed);
   return formatted;
+}
+
+dailyCard({
+  required String date,
+  required String timeSet,
+  required String tempMax,
+  required String tempMin,
+  required String appTempMax,
+  required String appTempMin,
+  required String timeRise,
+  required String precSum,
+  Color color = Colors.grey,
+}) {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    color: color,
+    elevation: 10,
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Text(
+            date,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+
+          const SizedBox(height: 10),
+          Icon(CupertinoIcons.sunrise, color: Colors.white),
+          Text('Sunrise : $timeRise', style: TextStyle(color: Colors.white)),
+          const SizedBox(height: 7),
+          Icon(CupertinoIcons.sunset, color: Colors.white),
+          Text('Sunset : $timeSet', style: TextStyle(color: Colors.white)),
+          const SizedBox(height: 7),
+          Icon(CupertinoIcons.thermometer_sun, color: Colors.white),
+          Text(
+            'Max Temperature : $tempMax °C',
+            style: TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 7),
+          Icon(CupertinoIcons.thermometer, color: Colors.white),
+          Text(
+            'Min Temperature : $tempMin °C',
+            style: TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 7),
+          Icon(CupertinoIcons.flame, color: Colors.white),
+          Text(
+            'Max Feel : $appTempMax °C',
+            style: TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 7),
+          Icon(CupertinoIcons.snow, color: Colors.white),
+          Text(
+            'Min Feel : $appTempMin °C',
+            style: TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 7),
+          Icon(CupertinoIcons.cloud_rain, color: Colors.white),
+          Text(
+            'Precipitation Sum : $precSum mm',
+            style: TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 5),
+        ],
+      ),
+    ),
+  );
+}
+
+List<Widget> dailyCards = [];
+dynamic formDailyCards(data) {
+  for (int i = 0; i < data["daily"]["time"].length; i++) {
+    var date = toForm(data["daily"]["time"][i], 'dd.MM.yyyy');
+    var tempMax = data["daily"]["temperature_2m_max"][i].toString();
+    var tempMin = data["daily"]["temperature_2m_min"][i].toString();
+    var appTempMax = data["daily"]["apparent_temperature_max"][i].toString();
+    var appTempMin = data["daily"]["apparent_temperature_min"][i].toString();
+    var timeSet = toForm(data["daily"]["sunset"][i], 'jm');
+    var timeRise = toForm(data["daily"]["sunrise"][i], 'jm');
+    var precSum = data["daily"]["precipitation_sum"][i].toString();
+    var color = allotColour(i);
+    dailyCards.add(
+      dailyCard(
+        color: color,
+        precSum: precSum,
+        date: date,
+        timeRise: timeRise,
+        timeSet: timeSet,
+        tempMax: tempMax,
+        tempMin: tempMin,
+        appTempMax: appTempMax,
+        appTempMin: appTempMin,
+      ),
+    );
+  }
+}
+
+Color allotColour(int i) {
+  // 0: Red, 1: Orange, 2: Yellow, 3: Green, 4: Blue, 5: Indigo, 6: Violet
+  switch (i) {
+    case 0:
+      return Colors.red;
+    case 1:
+      return Colors.orange;
+    case 2:
+      return const Color.fromARGB(255, 225, 202, 1);
+    case 3:
+      return Colors.green;
+    case 4:
+      return Colors.blue;
+    case 5:
+      return Colors.indigo;
+    case 6:
+      return Colors.purple; // Violet
+    default:
+      return Colors.grey; // fallback for out-of-range
+  }
 }
