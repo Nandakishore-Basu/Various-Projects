@@ -1,5 +1,6 @@
 import 'for_weather_app.dart';
 import 'package:flutter/material.dart';
+//import 'package:geolocator/geolocator.dart';
 
 class Page extends StatefulWidget {
   const Page({super.key});
@@ -13,7 +14,6 @@ class _PageState extends State<Page> {
   @override
   void initState() {
     super.initState();
-    fetchCoordinates('Dakshineswar');
     weather = getWeather();
   }
 
@@ -31,13 +31,28 @@ class _PageState extends State<Page> {
         actions: [
           IconButton(
             splashRadius: 16,
-            padding: const EdgeInsets.all(10),
-            onPressed: () {
+            padding: const EdgeInsets.all(5),
+            onPressed: () async {
               setState(() {
                 weather = getWeather();
+                tec.clear();
               });
-            }, //updation
+            },
             icon: Icon(Icons.refresh),
+          ),
+          IconButton(
+            splashRadius: 16,
+            onPressed: () async {
+              var location = await getLocation();
+              setState(() {
+                lat = location.latitude;
+                lon = location.longitude;
+                currentPlace = 'Current Location';
+                tec.clear();
+                weather = getWeather();
+              });
+            },
+            icon: Icon(Icons.location_on_outlined),
           ),
         ],
       ),
@@ -64,6 +79,7 @@ class _PageState extends State<Page> {
             );
           }
           final data = snapshot.data!;
+
           final mTemp = data["current"]["temperature_2m"];
           final mTime = toForm(data["current"]["time"], 'jm');
           final typeicon = getWeatherType(
@@ -81,6 +97,7 @@ class _PageState extends State<Page> {
           dailyCards.clear();
           formForecastCards(data);
           formDailyCards(data);
+
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(10),
@@ -124,7 +141,7 @@ class _PageState extends State<Page> {
                       ),
                     ],
                   ),
-            
+
                   const SizedBox(height: 20),
                   mainCard(
                     temp: mTemp,
@@ -142,7 +159,7 @@ class _PageState extends State<Page> {
                   ),
                   const SizedBox(height: 5),
                   SizedBox(
-                    height: 240,
+                    height: 260,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: forecastCards.length,
@@ -195,7 +212,7 @@ class _PageState extends State<Page> {
                     ),
                   ),
 
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 15),
                 ],
               ),
             ),

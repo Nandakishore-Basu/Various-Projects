@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 3.0.0+1
+version: 3.5.0+1
 
 environment:
   sdk: ^3.8.1
@@ -34,6 +34,9 @@ dependencies:
   http: ^1.4.0
   intl: ^0.20.2
   flutter_launcher_icons: ^0.14.4
+  msix: ^3.16.9
+  geolocator: ^14.0.1
+  permission_handler: ^12.0.0+1
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -65,6 +68,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - lib/icon/weather_app_icon.png
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -96,3 +102,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+msix_config:
+  display_name: Weather App
+  publisher_display_name: NKBasu
+  identity_name: com.nkbasu.weatherapp
+  msix_version: 1.0.0.0
+  logo_path: lib/icon/weather_app_icon.png
+  capabilities: internetClient, location

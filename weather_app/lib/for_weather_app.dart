@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
@@ -14,28 +15,32 @@ forecastCard({
   required String date,
   required String appTemp,
 }) {
-  return Card(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    color: Color.fromARGB(255, 173, 173, 132),
-    elevation: 12,
-    child: Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          Text(date),
-          const SizedBox(height: 5),
-          Text(
-            time,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-          const SizedBox(height: 5),
-          Image.network(icon),
-          const SizedBox(height: 5),
-          Text(type),
-          const SizedBox(height: 5),
-          Text('${temp.toString()} °C'),
-          Text('Feel : $appTemp °C'),
-        ],
+  return SizedBox(
+    height: 260,
+    child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: Color.fromARGB(255, 173, 173, 132),
+      elevation: 12,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(date),
+            const SizedBox(height: 5),
+            Text(
+              time,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 5),
+            Image.network(icon),
+            const SizedBox(height: 5),
+            Text(type),
+            const SizedBox(height: 5),
+            Text('${temp.toString()} °C'),
+            Text('Feel : $appTemp °C'),
+          ],
+        ),
       ),
     ),
   );
@@ -305,5 +310,28 @@ Color allotColour(int i) {
       return Colors.purple; // Violet
     default:
       return Colors.grey; // fallback for out-of-range
+  }
+}
+
+getLocation() async {
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    await Geolocator.openLocationSettings();
+    return await Geolocator.getCurrentPosition();
+  }
+
+  LocationPermission permission = await Geolocator.requestPermission();
+  bool allowed = await Geolocator.isLocationServiceEnabled();
+  if (allowed) {
+    return await Geolocator.getCurrentPosition();
+  }
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Location permissions are denied');
+    }
+  }
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error('Location permissions are permanently denied.');
   }
 }
