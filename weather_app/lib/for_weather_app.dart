@@ -321,10 +321,7 @@ getLocation() async {
   }
 
   LocationPermission permission = await Geolocator.requestPermission();
-  bool allowed = await Geolocator.isLocationServiceEnabled();
-  if (allowed) {
-    return await Geolocator.getCurrentPosition();
-  }
+
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
@@ -334,4 +331,5 @@ getLocation() async {
   if (permission == LocationPermission.deniedForever) {
     return Future.error('Location permissions are permanently denied.');
   }
+  return await Geolocator.getCurrentPosition();
 }

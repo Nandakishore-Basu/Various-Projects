@@ -28,6 +28,20 @@ class _PageState extends State<Page> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         elevation: 4,
+        leading: IconButton(
+          splashRadius: 16,
+          onPressed: () async {
+            var location = await getLocation();
+            setState(() {
+              lat = location.latitude;
+              lon = location.longitude;
+              currentPlace = 'Current location';
+              tec.clear();
+              weather = getWeather();
+            });
+          },
+          icon: Icon(Icons.location_on_outlined),
+        ),
         actions: [
           IconButton(
             splashRadius: 16,
@@ -39,20 +53,6 @@ class _PageState extends State<Page> {
               });
             },
             icon: Icon(Icons.refresh),
-          ),
-          IconButton(
-            splashRadius: 16,
-            onPressed: () async {
-              var location = await getLocation();
-              setState(() {
-                lat = location.latitude;
-                lon = location.longitude;
-                currentPlace = 'Current Location';
-                tec.clear();
-                weather = getWeather();
-              });
-            },
-            icon: Icon(Icons.location_on_outlined),
           ),
         ],
       ),
@@ -134,9 +134,10 @@ class _PageState extends State<Page> {
                             setState(() {
                               currentPlace = place;
                               weather = getWeather();
+                              tec.clear();
                             });
                           },
-                          child: Text('Submit'),
+                          child: Text('Get Weather'),
                         ),
                       ),
                     ],
