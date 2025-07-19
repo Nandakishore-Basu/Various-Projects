@@ -32,11 +32,11 @@ class _PageState extends State<Page> {
           splashRadius: 16,
           onPressed: () async {
             var location = await getLocation();
+            currentPlace = await curLocName(location);
+            tec.clear();
             setState(() {
               lat = location.latitude;
               lon = location.longitude;
-              currentPlace = 'Current location';
-              tec.clear();
               weather = getWeather();
             });
           },
@@ -213,13 +213,14 @@ class _PageState extends State<Page> {
                     ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
           );
         },
       ),
+      bottomNavigationBar: navBar(),
     );
   }
 }

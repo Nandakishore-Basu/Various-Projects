@@ -331,5 +331,52 @@ getLocation() async {
   if (permission == LocationPermission.deniedForever) {
     return Future.error('Location permissions are permanently denied.');
   }
+
   return await Geolocator.getCurrentPosition();
+}
+
+navBar() {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+    child: Container(
+      height: 50,
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'App Developed by Nandakishore Basu',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            'Email: nandakishore.basu@gmail.com',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+curLocName(Position location) async {
+  String lat = location.latitude.toString();
+  String lon = location.longitude.toString();
+  final api =
+      'https://api-bdc.io/data/reverse-geocode-client?latitude=$lat&longitude=$lon';
+  final url = Uri.parse(api);
+  final res = await http.get(url);
+  final data = jsonDecode(res.body);
+  final String locName = data['locality'] ?? data['city'] ?? 'Current Location';
+  return locName.toUpperCase();
 }
