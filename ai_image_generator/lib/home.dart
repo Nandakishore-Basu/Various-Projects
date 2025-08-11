@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController tec = TextEditingController();
   String prompt = 'Welcome';
-
+  Center x = Center(child: Text('Please Wait...'));
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width < 270 ? 200 : 250;
@@ -80,16 +81,33 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(
                     width: width,
                     height: width,
-                    child: Image(
-                      image: NetworkImage(
-                        'https://image.pollinations.ai/prompt/$prompt',
-                      ),
-                      errorBuilder: (context, error, stackTrace) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed To Load Image')),
-                        );
-                        return Text('Error');
-                      },
+                    child: Stack(
+                      children: [
+                        //Center(child: CircularProgressIndicator.adaptive()),
+                        x,
+                        Image(
+                          image: NetworkImage(
+                            'https://image.pollinations.ai/prompt/$prompt',
+                          ),
+                          errorBuilder: (context, error, stackTrace) {
+                            setState(() {
+                              x = Center();
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed To Load Image')),
+                            );
+                            return Center(
+                              child: Text(
+                                'Error\nPlease Check Internet Connection',
+                              ),
+                            );
+                          },
+                          loadingBuilder: (context, child, progress) =>
+                              progress == null
+                              ? child
+                              : CircularProgressIndicator(),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -153,8 +171,13 @@ class _HomePageState extends State<HomePage> {
 downloadImage(String url, BuildContext context) async {
   try {
     // Request storage permission
-    var status = await Permission.storage.request();
-    if (!status.isGranted) {
+    await Permission.storage.request();
+    if (await Permission.manageExternalStorage.isDenied) {
+      await Permission.manageExternalStorage.request();
+    }
+
+    if (!await Permission.storage.isGranted &&
+        !await Permission.manageExternalStorage.isGranted) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Storage permission denied.')));
@@ -164,15 +187,16 @@ downloadImage(String url, BuildContext context) async {
     // Download image data
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      final downloadsDir = Directory('/storage/emulated/0/Download');
+      Directory? downloadsDir;
+      downloadsDir = Directory('/storage/emulated/0/Download');
       if (!await downloadsDir.exists()) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Downloads folder not found.')),
-        );
-        return;
+        downloadsDir = await getExternalStorageDirectory();
+        // ScaffoldMessenger.of(
+        //   context,
+        // ).showSnackBar(SnackBar(content: Text('Downloads folder not found.')));
       }
-      final fileName = 'downloaded_image_${DateTime.now().millisecondsSinceEpoch}.jpeg';
-      final filePath = path.join(downloadsDir.path, fileName);
+      final fileName = 'image_${DateTime.now().millisecondsSinceEpoch}.jpeg';
+      final filePath = path.join(downloadsDir!.path, fileName);
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
 
