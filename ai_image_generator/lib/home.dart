@@ -1,0 +1,192 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
+import 'package:path/path.dart' as path;
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  TextEditingController tec = TextEditingController();
+  String prompt = 'Welcome';
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width < 270 ? 200 : 250;
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Image Generator AI'),
+        leading: IconButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                showCloseIcon: true,
+                dismissDirection: DismissDirection.horizontal,
+                duration: Duration(seconds: 10),
+                content: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'App Developed by Nandakishore Basu',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      'Email: nandakishore.basu@gmail.com',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      'Image Credits : pollinations.ai',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          icon: Icon(Icons.info_outline, color: Colors.blueAccent),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(25),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                  ),
+                  child: SizedBox(
+                    width: width,
+                    height: width,
+                    child: Image(
+                      image: NetworkImage(
+                        'https://image.pollinations.ai/prompt/$prompt',
+                      ),
+                      errorBuilder: (context, error, stackTrace) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Failed To Load Image')),
+                        );
+                        return Text('Error');
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: 5),
+                InkWell(
+                  radius: 25,
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () async {
+                    await downloadImage(
+                      'https://image.pollinations.ai/prompt/$prompt',
+                      context,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(Icons.download),
+                  ),
+                ),
+                SizedBox(height: 50),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: tec,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Describe Your Image',
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (tec.text != '') {
+                            setState(() {
+                              prompt = tec.text;
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please Give A Description'),
+                              ),
+                            );
+                          }
+                        });
+                      },
+                      child: Text('Generate'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+downloadImage(String url, BuildContext context) async {
+  try {
+    // Request storage permission
+    var status = await Permission.storage.request();
+    if (!status.isGranted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Storage permission denied.')));
+      return;
+    }
+
+    // Download image data
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final downloadsDir = Directory('/storage/emulated/0/Download');
+      if (!await downloadsDir.exists()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Downloads folder not found.')),
+        );
+        return;
+      }
+      final fileName = 'downloaded_image_${DateTime.now().millisecondsSinceEpoch}.jpeg';
+      final filePath = path.join(downloadsDir.path, fileName);
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Image downloaded to $filePath')));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to download image.')));
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Error: $e')));
+  }
+}
