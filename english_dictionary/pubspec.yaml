@@ -1,7 +1,7 @@
 name: english_dictionary
 description: "Easy User Friendly English Dictionary App"
 publish_to: 'none'
-version: 0.1.0
+version: 1.1.0
 
 environment:
   sdk: ^3.8.1

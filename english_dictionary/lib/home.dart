@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
             );
           }
           if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text('No data found'));
+            return Center(child: Text('Start Searching...'));
           }
 
           var data = snapshot.data as List<dynamic>;
@@ -90,9 +90,7 @@ class _HomeState extends State<Home> {
               }
             }
           }
-          if (phonetic.isNotEmpty) {
-            phonetic = '($phonetic)';
-          }
+
           var audioUrl = '';
           if (data[0]['phonetics'] != null && data[0]['phonetics'] is List) {
             for (var phonetic in data[0]['phonetics']) {
@@ -114,12 +112,28 @@ class _HomeState extends State<Home> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SelectableText(
-                          '$word $phonetic',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SelectableText(
+                                word,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              if (phonetic.isNotEmpty)
+                                SelectableText(
+                                  phonetic,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                         if (audioUrl.isNotEmpty)
@@ -155,7 +169,8 @@ class _HomeState extends State<Home> {
                               String antonyms = antonymList.isNotEmpty
                                   ? antonymList.join(', ')
                                   : 'No antonyms available';
-                              String example = def['example'] ?? 'No example available';
+                              String example =
+                                  def['example'] ?? 'No example available';
                               return Column(
                                 children: [
                                   SizedBox(height: 8),
