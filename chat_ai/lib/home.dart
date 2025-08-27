@@ -16,9 +16,15 @@ class _HomeState extends State<Home> {
   String prompt = '';
   String response = 'Hi ! Start Chatting';
   genText(String url) async {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Fetching Data'), duration: Duration(milliseconds: 1200),));
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     content: Text('Fetching Data'),
+    //     duration: Duration(milliseconds: 1200),
+    //   ),
+    // );
+    setState(() {
+      response = 'Loading Data... Please Wait...';
+    });
     var res = (await http.get(Uri.parse(url))).body;
     setState(() {
       response = res;
@@ -48,7 +54,7 @@ class _HomeState extends State<Home> {
                   Expanded(
                     child: TextField(
                       onSubmitted: (prompt) async {
-                        String x = prompt != ''? prompt:'hi';
+                        String x = prompt != '' ? prompt : 'hi';
                         newurl = url + x;
                         await genText(newurl);
                       },
@@ -59,7 +65,7 @@ class _HomeState extends State<Home> {
                   SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () async {
-                      prompt = tec.text != ''? tec.text:'hi';
+                      prompt = tec.text != '' ? tec.text : 'hi';
                       newurl = url + prompt;
                       await genText(newurl);
                     },
