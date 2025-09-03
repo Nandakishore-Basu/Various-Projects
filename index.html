@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NK Devs</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a1d, #4e4e50);
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 4rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      position: relative;
+      animation: glow 2s infinite alternate;
+    }
+
+    /* Neon Glow Effect */
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #00e6e6, 0 0 20px #00e6e6, 0 0 30px #00cccc;
+      }
+      to {
+        text-shadow: 0 0 20px #00ffff, 0 0 40px #00cccc, 0 0 60px #009999;
+      }
+    }
+
+    /* Decorative floating circles */
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 10s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-40px) scale(1.2); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .circle:nth-child(1) {
+      width: 120px; height: 120px;
+      top: 10%; left: 15%;
+      animation-duration: 12s;
+    }
+    .circle:nth-child(2) {
+      width: 80px; height: 80px;
+      bottom: 20%; right: 20%;
+      animation-duration: 9s;
+    }
+    .circle:nth-child(3) {
+      width: 150px; height: 150px;
+      bottom: 5%; left: 10%;
+      animation-duration: 15s;
+    }
+    h1{
+      justify-self : start;
+    }
+  </style>
+</head>
+<body>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  
+  <h1>NK Devs</h1>
+</body>
+</html>
