@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NK Devs</title>
+  <link rel="shortcut icon" href="icon.jpg" type="image/x-icon">
   <style>
     /* Reset default styles */
     * {
@@ -14,12 +15,15 @@
     }
 
     body {
-      height: 100vh;
+      min-height: 100vh;
+      width: 100vw;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #1a1a1d, #4e4e50);
-      overflow: hidden;
+      padding: 2.5rem;
+      background: linear-gradient(135deg, #00f, #f00);
+      background-attachment: fixed;
+      /* Ensures gradient covers even when content is taller than viewport */
     }
 
     h1 {
@@ -27,9 +31,11 @@
       color: #fff;
       text-transform: uppercase;
       letter-spacing: 5px;
-      position: relative;
-      animation: glow 2s infinite alternate;
+      animation: glow 4s infinite alternate;
+      text-shadow: 0 2px 8px #0008, 0 0 20px #00e6e6;
+      transition: text-shadow 0.3s;
     }
+    
 
     /* Neon Glow Effect */
     @keyframes glow {
@@ -70,8 +76,51 @@
       bottom: 5%; left: 10%;
       animation-duration: 15s;
     }
-    h1{
-      justify-self : start;
+
+    ul {
+      color: #fff;
+      font-size: 3rem;
+      margin: 1rem;
+      align-self: start;
+      list-style: none;
+      padding-left: 0;
+      /* Add subtle shadow for decoration */
+      text-shadow: 0 2px 8px #0006;
+    }
+    ul li {
+      margin-bottom: 0.5rem;
+      transition: transform 0.2s;
+    }
+    ul li:hover {
+      transform: scale(1.05);
+    }
+    a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 3rem;
+      background: linear-gradient(175deg, #ddff00,  #00ffbb);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 1px 6px #0007;
+      transition: text-shadow 0.2s, background 0.3s;
+    }
+    a:hover {
+      text-shadow: 0 0 20px #fff, 0 0 30px #00e6e6;
+     
+
+    }
+    #mail {
+      font-size: 15px;
+      align-self: center;
+      background: none;
+      -webkit-text-fill-color: #fff;
+      text-shadow: 0 1px 4px #0007;
+      margin-top: 2rem;
+      transition: text-shadow 0.2s;
+    }
+    #mail:hover {
+      text-shadow: 0 0 10px #fff, 0 0 20px #00e6e6;
     }
   </style>
 </head>
@@ -79,7 +128,19 @@
   <div class="circle"></div>
   <div class="circle"></div>
   <div class="circle"></div>
-  
   <h1>NK Devs</h1>
+  <ul>
+    <li><a href="calculator/index.html">Calculator</a></li>
+    <li><a href="Currency_Converter/index.html">Currency Converter</a></li>
+    <li><a href="clock/index.html">Digital Clock</a></li>
+    <li><a href="fibonacci/index2.html">Fibonacci</a></li>
+    <li><a href="gita/index.html">Gita Shloks</a></li>
+    <li><a href="jokes/index.html">Jokes</a></li>
+    <li><a href="stone_paper_scissor/index.html">Stone Paper Scissor</a></li>
+    <li><a href="tic_tac_toe/index.html">Tic Tac Toe</a></li>
+    <li><a href="tipCalc/index.html">Tip Calculator</a></li>
+  </ul>
+  
+  <a id="mail" href="mailto:nandakishore.basu@gmail.com">Mail Me</a>
 </body>
 </html>
