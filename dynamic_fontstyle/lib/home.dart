@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Dynamic Fontfamily Change',
+          'Dynamic Fonts',
           style: GoogleFonts.getFont('Aladin'),
         ),
         centerTitle: true,

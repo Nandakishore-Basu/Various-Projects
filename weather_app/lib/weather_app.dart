@@ -95,7 +95,7 @@ class _PageState extends State<Page> {
           final mApTemp = data["current"]["apparent_temperature"].toString();
           forecastCards.clear();
           dailyCards.clear();
-          formForecastCards(data);
+          formForecastCards(data, context);
           formDailyCards(data);
 
           return SingleChildScrollView(

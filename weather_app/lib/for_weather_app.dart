@@ -14,32 +14,48 @@ forecastCard({
   required String type,
   required String date,
   required String appTemp,
+  required BuildContext context,
 }) {
-  return SizedBox(
-    height: 260,
-    child: Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      color: Color.fromARGB(255, 173, 173, 132),
-      elevation: 12,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(date),
-            const SizedBox(height: 5),
-            Text(
-              time,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            const SizedBox(height: 5),
-            Image.network(icon),
-            const SizedBox(height: 5),
-            Text(type),
-            const SizedBox(height: 5),
-            Text('${temp.toString()} °C'),
-            Text('Feel : $appTemp °C'),
-          ],
+  return GestureDetector(
+    onTap: () {
+      final Map<String, dynamic> mapData = {
+        'time': time,
+        'temp': temp,
+        'icon': icon,
+        'type': type,
+        'date': date,
+        'appTemp': appTemp,
+      };
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (context) => ForecastDetails(mapData)));
+    },
+    child: SizedBox(
+      height: 260,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        color: Color.fromARGB(255, 173, 173, 132),
+        elevation: 12,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(date),
+              const SizedBox(height: 5),
+              Text(
+                time,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              const SizedBox(height: 5),
+              Image.network(icon),
+              const SizedBox(height: 5),
+              Text(type),
+              const SizedBox(height: 5),
+              Text('${temp.toString()} °C'),
+              Text('Feel : $appTemp °C'),
+            ],
+          ),
         ),
       ),
     ),
@@ -122,7 +138,7 @@ Map<String, String> getWeatherType(int code, DateTime time) {
 }
 
 List<Widget> forecastCards = [];
-dynamic formForecastCards(data) {
+dynamic formForecastCards(data, context) {
   for (int i = 0; i <= 167; i++) {
     var time = toForm(data["hourly"]["time"][i], 'j');
     var date = toForm(data["hourly"]["time"][i].split('T')[0], 'dd.MM.yyyy');
@@ -142,6 +158,7 @@ dynamic formForecastCards(data) {
         type: type,
         date: date,
         appTemp: appTemp,
+        context: context,
       ),
     );
   }
@@ -379,4 +396,30 @@ curLocName(Position location) async {
   final data = jsonDecode(res.body);
   final String locName = data['locality'] ?? data['city'] ?? 'Current Location';
   return locName.toUpperCase();
+}
+
+class ForecastDetails extends StatelessWidget {
+  const ForecastDetails(this.data, {super.key});
+  final Map<String, dynamic> data;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Hourly Details'), centerTitle: true),
+      body: ColoredBox(
+        color: const Color.fromARGB(255, 64, 89, 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: double.infinity),
+            Text(data['date']),
+            Text(data['time']),
+            Image.network(data['icon']),
+            Text(data['type']),
+            Text('${data['temp'].toString()} °C'),
+            Text('Feel : ${data['appTemp']} °C'),
+          ],
+        ),
+      ),
+    );
+  }
 }

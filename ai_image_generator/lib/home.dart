@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:external_path/external_path.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -188,7 +189,10 @@ downloadImage(String url, BuildContext context) async {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       Directory? downloadsDir;
-      downloadsDir = Directory('/storage/emulated/0/Download');
+      String storagePath = await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOAD,
+      );
+      downloadsDir = Directory(storagePath);
       if (!await downloadsDir.exists()) {
         downloadsDir = await getExternalStorageDirectory();
         // ScaffoldMessenger.of(
